@@ -1,6 +1,7 @@
 package validation
 
 import (
+	students "github.com/Davethompson01/School_Paddy_golang/app/models/Students"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -13,6 +14,6 @@ type CreateStudentRequest struct {
 
 var validate = validator.New()
 
-func ValidateStudent(req CreateStudentRequest) error {
-	return validate.Struct(req)
+func ValidateStudent(student students.CreateStudentAccount) error {
+    return validate.Struct(student)
 }
