@@ -16,7 +16,7 @@ type JsonResponse struct {
 func RespondWithJson(res http.ResponseWriter, StatusCode int, Success bool, Message string, data interface{}) {
 
 	response := JsonResponse{
-		Success: true,
+		Success: Success,
 		Message: Message,
 		Data:    data,
 	}
@@ -42,4 +42,12 @@ func RespondWithError(res http.ResponseWriter, code int, Message string) {
 	RespondWithJson(res, code, false, "Error", ErrorResponse{
 		Error: Message,
 	})
+}
+
+func InternalResponseModel(Success bool, Message string, data interface{}) JsonResponse {
+	return JsonResponse{
+		Success: Success,
+		Message: Message,
+		Data: data,
+	}
 }
