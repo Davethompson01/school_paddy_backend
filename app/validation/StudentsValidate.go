@@ -8,6 +8,9 @@ import (
 var validate = validator.New()
 
 func ValidateStudent(student students.CreateStudentAccount) error {
-    return validate.Struct(student)
+	return validate.Struct(student)
 }
 
+func ValidateStudentLogin(student students.StudentLogin) error {
+	return validate.Struct(student)
+}

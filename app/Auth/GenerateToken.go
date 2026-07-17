@@ -1,38 +1,41 @@
 package auth
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	jwt "github.com/golang-jwt/jwt/v4"
-	"github.com/joho/godotenv"
 )
 
 type Claims struct {
-	UserID int `json:"user_id"`
-
+	UserID int    `json:"user_id"`
+	Role   string `json:"role"`
 	jwt.RegisteredClaims
 }
 
-func secretKey() string {
-	godotenv.Load(".env")
-
+func secretKey() []byte {
 	loadSecret := os.Getenv("JWT_SECRET_KEY")
-	// []byte loadSecret
+
 	if loadSecret == "" {
-		log.Fatal("Failed to Load Port")
+		log.Fatal("JWT_SECRET_KEY is not set")
 	}
-	return loadSecret
+
+	return []byte(loadSecret)
 }
 
-func GenerateToken(userID int) (string, error) {
+func GenerateToken(userID int, role string) (string, error) {
 
 	claims := Claims{
 		UserID: userID,
+		Role:   role,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			Subject:   strconv.Itoa(userID),
+			Issuer:    "school-paddy",
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(15 * time.Minute)),
 		},
 	}
 
@@ -49,7 +52,12 @@ func ValidateToken(tokenString string) (*Claims, error) {
 		tokenString,
 		claims,
 		func(token *jwt.Token) (interface{}, error) {
-			return "", nil
+
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method")
+			}
+
+			return secretKey(), nil
 		},
 	)
 
@@ -58,8 +66,24 @@ func ValidateToken(tokenString string) (*Claims, error) {
 	}
 
 	if !token.Valid {
-		return nil, err
+		return nil, fmt.Errorf("invalid token")
 	}
 
 	return claims, nil
+}
+
+func RefreshToken(userID int, role string) (string, error) {
+	claims := Claims{
+		UserID: userID,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject:   strconv.Itoa(userID),
+			Issuer:    "school-paddy",
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(15 * time.Minute)),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	return token.SignedString(secretKey())
 }

@@ -6,4 +6,12 @@ type CreateStudentAccount struct {
 	Phone_Number string `validate:"required,len=11,numeric"`
 	Password     string `validate:"required,min=8"`
 	Role         string `json:"role"`
+	Auth_method  string `json:"auth_method"`
+}
+
+type StudentLogin struct {
+	User_id  int    `json:"user_id"`
+	Email    string `validate:"required,email"`
+	Password string `validate:"required,min=8"`
+	Role     string `json:"role"`
 }
