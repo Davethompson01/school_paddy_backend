@@ -7,6 +7,8 @@ import (
 	"os"
 	"time"
 
+	_ "github.com/jackc/pgx/v5/stdlib"
+
 	"github.com/joho/godotenv"
 )
 
@@ -18,9 +20,9 @@ func DatabaseConnection() (*sql.DB, error) {
 		log.Fatal("Failed to load Url")
 	}
 
-	db, err := sql.Open("postgres", db_url)
+	db, err := sql.Open("pgx", db_url)
 	if err != nil {
-		return nil, fmt.Errorf("Error while trying to connect database")
+		return nil, fmt.Errorf("Error while trying to connect database %v", err)
 	}
 
 	db.SetMaxOpenConns(25)
@@ -33,5 +35,5 @@ func DatabaseConnection() (*sql.DB, error) {
 		return nil, fmt.Errorf("Database connection failed")
 	}
 	fmt.Println("Database Connected successfully")
-	return db, nil	
+	return db, nil
 }

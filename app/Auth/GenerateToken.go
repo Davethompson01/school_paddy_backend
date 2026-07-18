@@ -75,11 +75,12 @@ func ValidateToken(tokenString string) (*Claims, error) {
 func RefreshToken(userID int, role string) (string, error) {
 	claims := Claims{
 		UserID: userID,
+		Role:   role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   strconv.Itoa(userID),
 			Issuer:    "school-paddy",
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(15 * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(15 * 24 * time.Minute)),
 		},
 	}
 

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	auth "github.com/Davethompson01/School_Paddy_golang/app/Auth"
@@ -14,7 +15,17 @@ func RequireRole(allowedRoles ...string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-			claims := r.Context().Value(ClaimsKey).(*auth.Claims)
+			value := r.Context().Value(ClaimsKey)
+			if value == nil {
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				return
+			}
+
+			claims, ok := value.(*auth.Claims)
+			if !ok {
+				http.Error(w, "Invalid token claims", http.StatusUnauthorized)
+				return
+			}
 
 			userRole := claims.Role
 
@@ -24,6 +35,8 @@ func RequireRole(allowedRoles ...string) func(http.Handler) http.Handler {
 					return
 				}
 			}
+			fmt.Println("userID from token:", claims.UserID)
+			fmt.Println("Allowed roles:", allowedRoles)
 
 			http.Error(w, "Forbidden", http.StatusForbidden)
 		})

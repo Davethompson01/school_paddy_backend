@@ -1,0 +1,39 @@
+package Validation
+
+import (
+	"errors"
+	"time"
+
+	students "github.com/Davethompson01/School_Paddy_golang/app/models/Students"
+	"github.com/go-playground/validator/v10"
+)
+
+var validate = validator.New()
+
+func ValidateStudent(student students.CreateStudentAccount) error {
+	if err := validate.Struct(student); err != nil {
+		return FormatValidationError(err)
+	}
+	return nil
+}
+
+func ValidateStudentLogin(student students.StudentLogin) error {
+
+	if err := validate.Struct(student); err != nil {
+		return FormatValidationError(err)
+	}
+	return nil
+}
+
+func ValidateProject(project students.Project) error {
+
+	if project.Deadline.Before(time.Now()) {
+		return errors.New("deadline must be in the future")
+	}
+
+	if err := validate.Struct(project); err != nil {
+		return FormatValidationError(err)
+	}
+
+	return nil
+}

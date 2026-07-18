@@ -1,0 +1,18 @@
+-- CREATE STUDENTS
+CREATE TABLE students(
+    user_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email TEXT NOT NULL,
+    Phone_number VARCHAR(20) NOT NULL,
+    role VARCHAR(10),
+    Password TEXT NOT NULL,
+    auth_method VARCHAR(30),
+    update_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMP  NOT NULL DEFAULT NOW()
+)
+
+
+ALTER TABLE students ADD COLUMN email_verified BOOLEAN DEFAULT false;
+
+UPDATE students
+SET email_verified = true where email = 'dad@example.com';

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	Studentsauthroute "github.com/Davethompson01/School_Paddy_golang/Routes/Students"
 	"github.com/Davethompson01/School_Paddy_golang/app/config"
 	"github.com/Davethompson01/School_Paddy_golang/database"
 	"github.com/go-chi/chi"
@@ -36,7 +37,7 @@ func main() {
 	// Instanctiate database connection
 	conn, err := database.DatabaseConnection()
 	if err != nil {
-		log.Fatal("Failed to Load Database connection")
+		log.Fatalf("Failed to Load Database connection %v", err)
 	}
 
 	cfg := config.ApiConfig{
@@ -55,12 +56,16 @@ func main() {
 	}))
 
 	v1Router := chi.NewRouter()
+	Studentsauthroute.AuthRoute(v1Router, &cfg)
+	Studentsauthroute.Project(v1Router, &cfg)
 	// v1Router.POST("/")
 	router.Mount("/v1", v1Router)
 	server := &http.Server{
 		Handler: router,
 		Addr:    ":" + portString,
 	}
+
+	log.Printf("Server is already running %v", portString)
 	server_err := server.ListenAndServe()
 	if server_err != nil {
 		log.Fatal(server_err)
