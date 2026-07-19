@@ -33,9 +33,9 @@ func StudenthandlerCreateAccount(apicfg *config.ApiConfig) http.HandlerFunc {
 	}
 }
 
-func StudentLoginHandler(apiCfg *config.ApiConfig) http.HandlerFunc {
+func LoginHandler(apiCfg *config.ApiConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var studentLogin students.StudentLogin
+		var studentLogin students.Login
 		if err := json.NewDecoder(r.Body).Decode(&studentLogin); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	solutionexpert_model "github.com/Davethompson01/School_Paddy_golang/app/models/SolutionExpert"
 	students "github.com/Davethompson01/School_Paddy_golang/app/models/Students"
 	"github.com/go-playground/validator/v10"
 )
@@ -17,7 +18,7 @@ func ValidateStudent(student students.CreateStudentAccount) error {
 	return nil
 }
 
-func ValidateStudentLogin(student students.StudentLogin) error {
+func ValidateStudentLogin(student students.Login) error {
 
 	if err := validate.Struct(student); err != nil {
 		return FormatValidationError(err)
@@ -35,5 +36,20 @@ func ValidateProject(project students.Project) error {
 		return FormatValidationError(err)
 	}
 
+	return nil
+}
+
+func ValidateExpert(expert solutionexpert_model.Create_Expert_Account) error {
+	if err := validate.Struct(expert); err != nil {
+		return FormatValidationError(err)
+	}
+	return nil
+}
+
+func ValidateExpertLogin(expert students.Login) error {
+
+	if err := validate.Struct(expert); err != nil {
+		return FormatValidationError(err)
+	}
 	return nil
 }

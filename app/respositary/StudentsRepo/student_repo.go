@@ -2,7 +2,7 @@ package Studentsrepo
 
 import (
 	"context"
-	"database/sql"
+	"fmt"
 	"time"
 
 	"github.com/Davethompson01/School_Paddy_golang/app/config"
@@ -29,62 +29,57 @@ func CreateStudentAccount(apiCfg *config.ApiConfig, student students.CreateStude
 		student.Auth_method,
 	)
 
+	fmt.Printf("Error type: %T\n", err)
+	fmt.Printf("Error value: %#v\n", err)
 	return err
 }
 
-func CheckMailExist(apicfg *config.ApiConfig, email string) bool {
-	var checkExist bool
-	err := apicfg.DB.QueryRow(`
-	SELECT EXISTS (
-		SELECT 1
+func CheckMailExist(apiCfg *config.ApiConfig, email string) bool {
+	var exists bool
+
+	query := `
+		SELECT EXISTS (
+			SELECT 1 FROM students WHERE email = $1
+			UNION ALL
+			SELECT 1 FROM solution_expert WHERE email = $1
+		)
+	`
+
+	err := apiCfg.DB.QueryRow(query, email).Scan(&exists)
+	if err != nil {
+		return false
+	}
+
+	return exists
+}
+
+func GetUserByEmail(apiCfg *config.ApiConfig, email string) (students.Login, error) {
+	var user students.Login
+
+	query := `
+		SELECT user_id, email, password, role
 		FROM students
 		WHERE email = $1
-	)
-`, email).Scan(&checkExist)
-	if err != nil {
-		return false
-	}
 
-	if err == sql.ErrNoRows {
-		return false
-	}
+		UNION ALL
 
-	return checkExist
-}
+		SELECT user_id, email, password, role
+		FROM experts
+		WHERE email = $1
 
-func StudentLogin(apicfg *config.ApiConfig, id int, email string, password string) (students.StudentLogin, error) {
-	// var user_id int
-	var user students.StudentLogin
-	var userEmail string
-	var userPassword string
-	err := apicfg.DB.QueryRow(`
-	SELECT user_id, email, password FROM students WHERE email = $1 AND password = $2
-	`, email).Scan(
-		&user,
-		&userEmail,
-		&userPassword,
-	)
-	if err != nil {
-		return students.StudentLogin{}, nil
-	}
-	return user, nil
-}
+		LIMIT 1;
+	`
 
-func GetStudentByEmail(apiCfg *config.ApiConfig, email string) (students.StudentLogin, error) {
-	var user students.StudentLogin
-	// var user_id int
-	// var userEmail string
-	// var userPassword string
-	// var userRole string
-	err := apiCfg.DB.QueryRow(`
-	SELECT user_id, email, password, role FROM students WHERE email = $1; `, email).Scan(
+	err := apiCfg.DB.QueryRow(query, email).Scan(
 		&user.User_id,
 		&user.Email,
 		&user.Password,
 		&user.Role,
 	)
+
 	if err != nil {
-		return students.StudentLogin{}, err
+		return students.Login{}, err
 	}
+
 	return user, nil
 }

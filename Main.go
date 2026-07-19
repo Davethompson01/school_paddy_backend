@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	routes "github.com/Davethompson01/School_Paddy_golang/Routes"
 	Studentsauthroute "github.com/Davethompson01/School_Paddy_golang/Routes/Students"
 	"github.com/Davethompson01/School_Paddy_golang/app/config"
 	"github.com/Davethompson01/School_Paddy_golang/database"
@@ -56,7 +57,7 @@ func main() {
 	}))
 
 	v1Router := chi.NewRouter()
-	Studentsauthroute.AuthRoute(v1Router, &cfg)
+	routes.AuthRoute(v1Router, &cfg)
 	Studentsauthroute.Project(v1Router, &cfg)
 	// v1Router.POST("/")
 	router.Mount("/v1", v1Router)

@@ -26,9 +26,22 @@ github.com/go-playground/validator/v10
 # github.com/golang-jwt/jwt/v4 v4.5.2
 ## explicit; go 1.16
 github.com/golang-jwt/jwt/v4
+# github.com/jackc/chunkreader/v2 v2.0.1
+## explicit; go 1.12
+github.com/jackc/chunkreader/v2
+# github.com/jackc/pgconn v1.14.3
+## explicit; go 1.17
+github.com/jackc/pgconn
+github.com/jackc/pgconn/internal/ctxwatch
+# github.com/jackc/pgio v1.0.0
+## explicit; go 1.12
+github.com/jackc/pgio
 # github.com/jackc/pgpassfile v1.0.0
 ## explicit; go 1.12
 github.com/jackc/pgpassfile
+# github.com/jackc/pgproto3/v2 v2.3.3
+## explicit; go 1.12
+github.com/jackc/pgproto3/v2
 # github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761
 ## explicit; go 1.14
 github.com/jackc/pgservicefile
@@ -57,10 +70,23 @@ github.com/joho/godotenv
 ## explicit; go 1.18
 github.com/leodido/go-urn
 github.com/leodido/go-urn/scim/schema
+# github.com/lib/pq v1.12.3
+## explicit; go 1.21
+github.com/lib/pq
+github.com/lib/pq/internal/pgpass
+github.com/lib/pq/internal/pgservice
+github.com/lib/pq/internal/pqsql
+github.com/lib/pq/internal/pqtime
+github.com/lib/pq/internal/pqutil
+github.com/lib/pq/internal/proto
+github.com/lib/pq/oid
+github.com/lib/pq/pqerror
+github.com/lib/pq/scram
 # golang.org/x/crypto v0.52.0
 ## explicit; go 1.25.0
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
+golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/sha3
 # golang.org/x/sync v0.20.0
 ## explicit; go 1.25.0

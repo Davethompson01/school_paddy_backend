@@ -9,9 +9,14 @@ type CreateStudentAccount struct {
 	Auth_method  string `json:"auth_method"`
 }
 
-type StudentLogin struct {
+type Login struct {
 	User_id  int    `json:"user_id"`
 	Email    string `validate:"required,email"`
 	Password string `validate:"required,min=8"`
 	Role     string `json:"role"`
+}
+
+type LoginTokens struct {
+	AccessToken  string
+	RefreshToken string
 }
