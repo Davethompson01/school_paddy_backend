@@ -14,22 +14,19 @@ CREATE TABLE paddyProject(
 )
 
 ALTER TABLE paddyproject DROP COLUMN user_id;
-ALTER Table paddyproject add COLUMN user_id INTEGER REFERENCES students(user_id);
+
+
+ALTER Table paddyproject add COLUMN student_id INTEGER REFERENCES students(user_id) NOT NULL;
+
+ALTER TABLE paddyproject 
+ALTER COLUMN student_id SET NOT NULL;
 
 ALTER Table paddyproject add COLUMN discount_code VARCHAR(10);
 
 
-ALTER TABLE students
-ADD CONSTRAINT students_email_unique UNIQUE (email);
-
-ALTER TABLE solution_expert
-ADD CONSTRAINT solution_expert_email_unique UNIQUE (email);
 
 
 
 
-SELECT EXISTS (
-    SELECT 1 FROM students WHERE email = 'dthoadddndnnsddssd@example.com'
-    UNION ALL
-    SELECT 1 FROM solution_expert WHERE email = 'dthoadddndnnsddssd@example.com'
-);
+
+ALTER TABLE paddyProject ADD COLUMN accepted_a_expert_already BOOLEAN default false;

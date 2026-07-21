@@ -22,3 +22,10 @@ type FileDispute struct {
 	Home_Work_File     string `json:"homework"`
 	Dispute_details    string `json:"dispute_details"`
 }
+
+type AcceptBid_HomeWork struct {
+	Student_id         int `validate:"required"`
+	Solution_expert_id int `validate:"required"`
+	Project_id int  `validate:"required"`
+	Accepted   bool `validate:"required"`
+}

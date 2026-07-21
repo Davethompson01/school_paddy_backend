@@ -2,7 +2,8 @@ package handler
 
 import (
 	"encoding/json"
-	
+	"fmt"
+
 	"net/http"
 
 	"github.com/Davethompson01/School_Paddy_golang/app/config"
@@ -42,9 +43,9 @@ func LoginHandler(apiCfg *config.ApiConfig) http.HandlerFunc {
 		}
 
 		token, err := Services.LoginInto_AsStudent(apiCfg, studentLogin)
-		// msg := fmt.Sprintf("Login failed: %v", err)
+		msg := fmt.Sprintf("Login failed: %v", err)
 		if err != nil {
-			RespondWithJson(w, http.StatusUnauthorized, false, "Login failed", nil)
+			RespondWithJson(w, http.StatusUnauthorized, false, msg, nil)
 			return
 		}
 		http.SetCookie(w, &http.Cookie{

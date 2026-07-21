@@ -14,5 +14,6 @@ CREATE TABLE students(
 
 ALTER TABLE students ADD COLUMN email_verified BOOLEAN DEFAULT false;
 
-UPDATE students
-SET email_verified = true where email = 'dad@example.com';
+ALTER TABLE students
+ADD CONSTRAINT students_email_unique UNIQUE (email);
+

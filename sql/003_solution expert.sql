@@ -11,6 +11,7 @@ CREATE TABLE solution_expert(
     created_at TIMESTAMP  NOT NULL DEFAULT NOW()
 )
 
-
 ALTER TABLE solution_expert ADD COLUMN email_verified BOOLEAN DEFAULT false;
 
+ALTER TABLE solution_expert
+ADD CONSTRAINT solution_expert_email_unique UNIQUE (email);

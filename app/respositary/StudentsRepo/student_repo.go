@@ -64,7 +64,7 @@ func GetUserByEmail(apiCfg *config.ApiConfig, email string) (students.Login, err
 		UNION ALL
 
 		SELECT user_id, email, password, role
-		FROM experts
+		FROM solution_expert
 		WHERE email = $1
 
 		LIMIT 1;
