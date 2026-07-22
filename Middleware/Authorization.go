@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	auth "github.com/Davethompson01/School_Paddy_golang/app/Auth"
+	auth "github.com/Davethompson01/School_Paddy_golang/internal/Auth"
 )
 
 type contextKey string

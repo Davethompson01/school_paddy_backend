@@ -2,8 +2,8 @@ package routes
 
 import (
 	middleware "github.com/Davethompson01/School_Paddy_golang/Middleware"
-	"github.com/Davethompson01/School_Paddy_golang/app/config"
-	"github.com/Davethompson01/School_Paddy_golang/app/handler"
+	"github.com/Davethompson01/School_Paddy_golang/internal/config"
+	"github.com/Davethompson01/School_Paddy_golang/internal/handler"
 	"github.com/go-chi/chi"
 )
 
@@ -18,7 +18,8 @@ func Project(r chi.Router, apiCfg *config.ApiConfig) {
 		//  Students
 		r.Post("/upload", handler.Upload_homework(apiCfg))
 		r.Post("/acceptBid", handler.HandlerAcceptBID(apiCfg))
-
+		r.Post("/negotiateBid", handler.HandlerNegotiateBID(apiCfg))
+		// r.Get("/notis_")
 	})
 
 	// SOLUTION EXPERTS ROUTES

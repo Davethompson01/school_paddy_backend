@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	auth "github.com/Davethompson01/School_Paddy_golang/app/Auth"
+	auth "github.com/Davethompson01/School_Paddy_golang/internal/Auth"
 )
 
 func JWTMiddleware(next http.Handler) http.Handler {
@@ -26,7 +26,6 @@ func JWTMiddleware(next http.Handler) http.Handler {
 			http.Error(w, fmt.Sprintf("Invalid token: %v", err), http.StatusUnauthorized)
 			return
 		}
-		
 
 		ctx := context.WithValue(r.Context(), ClaimsKey, claims)
 
