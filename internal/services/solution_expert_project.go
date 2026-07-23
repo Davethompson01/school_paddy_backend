@@ -5,8 +5,10 @@ import (
 
 	"github.com/Davethompson01/School_Paddy_golang/internal/config"
 	solutionexpert_model "github.com/Davethompson01/School_Paddy_golang/internal/models/SolutionExpert"
+	students "github.com/Davethompson01/School_Paddy_golang/internal/models/Students"
 	rabbitmq "github.com/Davethompson01/School_Paddy_golang/internal/rabbitMQ"
 	"github.com/Davethompson01/School_Paddy_golang/internal/respositary"
+	Studentsrepo "github.com/Davethompson01/School_Paddy_golang/internal/respositary/StudentsRepo"
 	Validation "github.com/Davethompson01/School_Paddy_golang/internal/validation"
 )
 
@@ -58,4 +60,24 @@ func NegotiateBid(apiCfg *config.ApiConfig, bid solutionexpert_model.NegotiatePr
 	}
 
 	return "Homework Accepted", nil
+}
+
+func StudentProjectAll(api *config.ApiConfig, studentID int) (students.ProjectSummary, error) {
+
+	projects, err := Studentsrepo.SelectProjects(api, studentID)
+	if err != nil {
+		return students.ProjectSummary{}, err
+	}
+
+	summary, err := Studentsrepo.CountProjects(api, studentID)
+	if err != nil {
+		return students.ProjectSummary{}, err
+	}
+
+	return students.ProjectSummary{
+		Projects:  projects,
+		Completed: summary.Completed,
+		Ongoing:   summary.Ongoing,
+		Cancelled: summary.Cancelled,
+	}, nil
 }

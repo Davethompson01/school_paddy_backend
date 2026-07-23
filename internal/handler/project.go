@@ -95,3 +95,20 @@ func HandlerAcceptBID(api *config.ApiConfig) http.HandlerFunc {
 	}
 
 }
+
+func StudentProjectAll(api *config.ApiConfig) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
+		Student_id := claims.UserID
+
+		serv_StudentProject,err := Services.StudentProjectAll(api, Student_id)
+		if err != nil {
+			RespondWithJson(w, http.StatusUnauthorized, false, err.Error(), nil)
+			return
+		}
+		RespondWithJson(w, http.StatusAccepted, true, "Fetched all projects for Students", serv_StudentProject)
+		
+	}
+}
+
+
