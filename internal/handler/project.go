@@ -44,7 +44,7 @@ func HandlerCreateBID(api *config.ApiConfig) http.HandlerFunc {
 		claims := req.Context().Value(middleware.ClaimsKey).(*auth.Claims)
 		bid.Solution_expert_id = claims.UserID
 
-		createBid, err := Services.Service_CreateHomeWorkBID(api, bid)
+		createBid, err := Services.CreateBid(api, bid)
 		if err != nil {
 			RespondWithJson(res, http.StatusUnauthorized, false, err.Error(), nil)
 			return

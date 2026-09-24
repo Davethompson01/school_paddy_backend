@@ -11,7 +11,6 @@ CREATE TABLE students(
     created_at TIMESTAMP  NOT NULL DEFAULT NOW()
 )
 
-
 ALTER TABLE students ADD COLUMN email_verified BOOLEAN DEFAULT false;
 
 ALTER TABLE students

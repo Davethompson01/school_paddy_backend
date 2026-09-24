@@ -31,6 +31,5 @@ func ReturnExpertAppliedNotis(api *config.ApiConfig, studentID int) ([]students.
 			CreatedAt: expert.CreatedAt,
 		})
 	}
-
 	return responses, nil
 }

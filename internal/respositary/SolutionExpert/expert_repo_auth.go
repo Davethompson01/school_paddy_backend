@@ -2,6 +2,7 @@ package solutionexpert
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/Davethompson01/School_Paddy_golang/internal/config"
@@ -20,12 +21,19 @@ func Create_Expert_Account(apiCfg *config.ApiConfig, expert solutionexpert_model
 	_, err := apiCfg.DB.ExecContext(
 		ctx,
 		query,
-		&expert.Name,
-		&expert.Phone_Number,
-		&expert.Password,
-		&expert.Role,
-		&expert.Auth_method,
+		expert.Name,
+		expert.Email,
+		expert.Phone_Number,
+		expert.Password,
+		expert.Role,
+		expert.Auth_method,
 	)
+	fmt.Printf("Name: %q, length: %d\n", expert.Name, len(expert.Name))
+	fmt.Printf("Email: %q, length: %d\n", expert.Email, len(expert.Email))
+	fmt.Printf("Phone: %q, length: %d\n", expert.Phone_Number, len(expert.Phone_Number))
+	fmt.Printf("Password length: %d\n", len(expert.Password))
+	fmt.Printf("Role: %q, length: %d\n", expert.Role, len(expert.Role))
+	fmt.Printf("Auth method: %q, length: %d\n", expert.Auth_method, len(expert.Auth_method))
 
 	return err
 }

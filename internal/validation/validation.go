@@ -11,7 +11,7 @@ import (
 
 var validate = validator.New()
 
-func ValidateStudent(student students.CreateStudentAccount) error {
+func ValidateAccount_Creation(student students.CreateStudentAccount) error {
 	if err := validate.Struct(student); err != nil {
 		return FormatValidationError(err)
 	}

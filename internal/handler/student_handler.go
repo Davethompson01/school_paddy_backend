@@ -43,7 +43,7 @@ func LoginHandler(apiCfg *config.ApiConfig) http.HandlerFunc {
 		}
 
 		token, err := Services.LoginInto_AsStudent(apiCfg, studentLogin)
-		msg := fmt.Sprintf("Login failed: %v", err)
+		msg := fmt.Sprintf("Login failed")
 		if err != nil {
 			RespondWithJson(w, http.StatusUnauthorized, false, msg, nil)
 			return

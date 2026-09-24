@@ -17,8 +17,10 @@ func CreateAccount_SolutionExpert(apiCfg *config.ApiConfig, expertModel solution
 	}
 
 	if err := Validation.ValidateExpert(expertModel); err != nil {
-		return "", err
+		return "error found", err
 	}
+
+	// errors.New(e)
 
 	hashedPassword, err := auth.HashPassword(expertModel.Password)
 	if err != nil {
@@ -26,7 +28,7 @@ func CreateAccount_SolutionExpert(apiCfg *config.ApiConfig, expertModel solution
 	}
 
 	expertModel.Password = hashedPassword
-	expertModel.Role = "Solution_Expert"
+	expertModel.Role = "Solution"
 	expertModel.Auth_method = "school_paddy_Provider"
 
 	if err := solutionexpert.Create_Expert_Account(apiCfg, expertModel); err != nil {

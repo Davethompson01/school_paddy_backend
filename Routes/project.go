@@ -10,7 +10,7 @@ import (
 func Project(r chi.Router, apiCfg *config.ApiConfig) {
 
 	// STUDENTS ROUTES
-	r.Route("/project", func(r chi.Router) {
+	r.Route("/stu/project", func(r chi.Router) {
 		r.Use(middleware.APIKey)
 		r.Use(middleware.JWTMiddleware)
 		r.Use(middleware.RequireRole("admin", "super_admin", "Student"))
@@ -23,10 +23,10 @@ func Project(r chi.Router, apiCfg *config.ApiConfig) {
 	})
 
 	// SOLUTION EXPERTS ROUTES
-	r.Route("/project", func(r chi.Router) {
+	r.Route("/sol/project", func(r chi.Router) {
 		r.Use(middleware.APIKey)
 		r.Use(middleware.JWTMiddleware)
-		r.Use(middleware.RequireRole("admin", "super_admin", "Solution_expert"))
+		r.Use(middleware.RequireRole("admin", "super_admin", "Solution"))
 
 		//  SOLUTION EXPERTS
 		r.Post("/createBid", handler.HandlerCreateBID(apiCfg))

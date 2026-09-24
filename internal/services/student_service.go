@@ -15,14 +15,12 @@ import (
 func CreateStudent_Service(apiCfg *config.ApiConfig, studentModel students.CreateStudentAccount) (string, error) {
 	exists := Studentsrepo.CheckMailExist(apiCfg, studentModel.Email)
 
-	fmt.Println("Checking email:", studentModel.Email)
-	fmt.Println("Exists:", exists)
 
 	if exists {
 		return "", errors.New("email already exists")
 	}
 
-	if err := Validation.ValidateStudent(studentModel); err != nil {
+	if err := Validation.ValidateAccount_Creation(studentModel); err != nil {
 		return "", err
 	}
 
@@ -37,11 +35,10 @@ func CreateStudent_Service(apiCfg *config.ApiConfig, studentModel students.Creat
 
 	if err := Studentsrepo.CreateStudentAccount(apiCfg, studentModel); err != nil {
 
-		fmt.Printf("SERVICE ERROR TYPE: %T\n", err)
-
+		
 		pgErr, ok := err.(*pgconn.PgError)
 
-		fmt.Println("Type assertion:", ok)
+		// fmt.Println("Type assertion:", ok)
 
 		if ok {
 			fmt.Println("Constraint:", pgErr.ConstraintName)

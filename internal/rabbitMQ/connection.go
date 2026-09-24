@@ -11,6 +11,7 @@ type RabbitMQ struct {
 
 
 func New(url string) (*RabbitMQ, error) {
+
     conn, err := amqp.Dial(url)
     if err != nil {
         return nil, err
@@ -22,8 +23,23 @@ func New(url string) (*RabbitMQ, error) {
         return nil, err
     }
 
+    _, err = ch.QueueDeclare(
+        "Bid_created",
+        true,
+        false,
+        false,
+        false,
+        nil,
+    )
+
+    if err != nil {
+        ch.Close()
+        conn.Close()
+        return nil, err
+    }
+
     return &RabbitMQ{
-        Conn: conn,
+        Conn:    conn,
         Channel: ch,
     }, nil
 }

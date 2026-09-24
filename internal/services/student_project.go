@@ -12,6 +12,8 @@ func Upload_homework(apiCfg *config.ApiConfig, project students.Project) (string
 	if err != nil {
 		return err.Error(), err
 	}
+
+	project.Status = "Pending"
 	if err := respositary.HomeWorkRespositary_IntoDB(apiCfg, project); err != nil {
 		return err.Error(), err
 	}

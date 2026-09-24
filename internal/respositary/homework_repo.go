@@ -11,13 +11,15 @@ import (
 
 func HomeWorkRespositary_IntoDB(apiCfg *config.ApiConfig, project students.Project) error {
 	query := `
-		INSERT INTO paddyproject(student_id, category, level, topic, description, bidAmount, deadline, update_at, requirement, discount_code,  status)
-		VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+		INSERT INTO paddyproject(student_id, category, level, topic, description, bidAmount, deadline, update_at, requirement, discount_code, status)
+		VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10, $11)
 	`
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	_, err := apiCfg.DB.ExecContext(ctx, query, project.UserID, project.Category,
+	_, err := apiCfg.DB.ExecContext(ctx, query,
+		project.UserID,
+		project.Category,
 		project.Level,
 		project.Topic,
 		project.Description,
@@ -25,7 +27,8 @@ func HomeWorkRespositary_IntoDB(apiCfg *config.ApiConfig, project students.Proje
 		project.Deadline,
 		project.UpdatedAt,
 		project.Requirement,
-		project.DiscountCode)
+		project.DiscountCode,
+		project.Status)
 
 	return err
 }
@@ -44,9 +47,9 @@ func GetProjectByID(api *config.ApiConfig, project_id int) (solutionexpert_model
 	return project, err
 }
 
-func Create_Homework_BID_expert(api *config.ApiConfig, apply_for_work solutionexpert_model.ApplyForHomeWork) error {
-	query := `INSERT INTO applied_projects(student_id, solution_expert_id, project_id, accepted, Accepted_a_expert_already)
-	VALUES($1, $2, $3, $4, $5)`
+func CreateBid(api *config.ApiConfig, apply_for_work solutionexpert_model.ApplyForHomeWork) error {
+	query := `INSERT INTO applied_projects(student_id, solution_expert_id, project_id, accepted, Accepted_a_expert_already, isCompleted, status)
+	VALUES($1, $2, $3, $4, $5, $6, $7)`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -57,8 +60,9 @@ func Create_Homework_BID_expert(api *config.ApiConfig, apply_for_work solutionex
 		apply_for_work.Paddyproject_id,
 		apply_for_work.Accepted,
 		apply_for_work.Accepted_a_expert_already,
+		apply_for_work.IsCompleted,
+		apply_for_work.Status,
 	)
-
 	return err
 }
 
@@ -114,5 +118,3 @@ func ApprovedHomeWork(api *config.ApiConfig, project_id int) error {
 	_, err := api.DB.ExecContext(ctx, query, project_id)
 	return err
 }
-
-

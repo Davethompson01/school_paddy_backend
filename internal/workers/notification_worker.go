@@ -1,4 +1,4 @@
-package rabbitmq
+package worker
 
 import (
 	"encoding/json"
@@ -39,6 +39,5 @@ func StartNotificationWorker(ch *amqp.Channel, api *config.ApiConfig) {
 		}
 
 		msg.Ack(false)
-
 	}
 }

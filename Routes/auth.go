@@ -15,7 +15,7 @@ func AuthRoute(r chi.Router, apicfg *config.ApiConfig) {
 		r.Use(middleware.APIKey)
 		r.Post("/registerStudent", handler.StudenthandlerCreateAccount(apicfg))
 
-		r.Post("/registerSolutionExpert", handler.StudenthandlerCreateAccount(apicfg))
+		r.Post("/registerSolutionExperts", handler.ExperthandlerCreateAccount(apicfg))
 
 		r.Post("/login", handler.LoginHandler(apicfg))
 	})

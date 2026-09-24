@@ -9,6 +9,7 @@ import (
 	routes "github.com/Davethompson01/School_Paddy_golang/Routes"
 	"github.com/Davethompson01/School_Paddy_golang/database"
 	"github.com/Davethompson01/School_Paddy_golang/internal/config"
+	rabbitmq "github.com/Davethompson01/School_Paddy_golang/internal/rabbitMQ"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
@@ -40,8 +41,17 @@ func main() {
 		log.Fatalf("Failed to Load Database connection %v", err)
 	}
 
+	rabbit, err := rabbitmq.New("amqp://guest:guest@localhost:5672/")
+	// rabbit, err := rabbitmq.New("amqp://admin:admin123@localhost:5672/")
+	if err != nil {
+		log.Fatal("Failed to connect to RabbitMQ:", err)
+	}
+	defer rabbit.Close()
+
+
 	cfg := config.ApiConfig{
-		DB: conn,
+		DB:     conn,
+		Rabbit: rabbit,
 	}
 	defer cfg.DB.Close()
 
