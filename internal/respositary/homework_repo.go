@@ -48,7 +48,7 @@ func GetProjectByID(api *config.ApiConfig, project_id int) (solutionexpert_model
 }
 
 func CreateBid(api *config.ApiConfig, apply_for_work solutionexpert_model.ApplyForHomeWork) error {
-	query := `INSERT INTO applied_projects(student_id, solution_expert_id, project_id, accepted, Accepted_a_expert_already, isCompleted, status)
+	query := `INSERT INTO bid(student_id, solution_expert_id, project_id, accepted, Accepted_a_expert_already, isCompleted, status)
 	VALUES($1, $2, $3, $4, $5, $6, $7)`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

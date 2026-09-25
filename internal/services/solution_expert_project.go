@@ -11,54 +11,73 @@ import (
 	"github.com/Davethompson01/School_Paddy_golang/internal/respositary"
 	Studentsrepo "github.com/Davethompson01/School_Paddy_golang/internal/respositary/StudentsRepo"
 	Validation "github.com/Davethompson01/School_Paddy_golang/internal/validation"
-	worker "github.com/Davethompson01/School_Paddy_golang/internal/workers"
 )
 
-func CreateBid(apiCfg *config.ApiConfig, bid solutionexpert_model.ApplyForHomeWork) (string, error) {
+func CreateBid(
+	apiCfg *config.ApiConfig,
+	bid solutionexpert_model.ApplyForHomeWork,
+) (string, error) {
+
 	err := Validation.ValidateCreateBID(bid)
 	if err != nil {
 		return err.Error(), err
 	}
-	checkIfAlreadyAccept, err := respositary.GetProjectByID(apiCfg, bid.Paddyproject_id)
+
+	project, err := respositary.GetProjectByID(
+		apiCfg,
+		bid.Paddyproject_id,
+	)
 	if err != nil {
 		return err.Error(), err
 	}
-	if checkIfAlreadyAccept.Accepted_a_expert_already == true {
+
+	if project.Accepted_a_expert_already {
 		return "A solution expert has already been Accepted in this project", nil
 	}
 
 	bid.Accepted = false
 	bid.IsCompleted = false
 	bid.Status = "Pending"
-	// event := solutionexpert_model.BidCreatedNotification{
-	// 	StudentID:        checkIfAlreadyAccept.Student_id,
-	// 	SolutionExpertID: bid.Solution_expert_id, // or whatever your field is called
-	// 	ProjectID:        bid.Paddyproject_id,
-	// 	Seen:             false,
-	// }
 
-	NotificationWorker := worker.StartNotificationWorker()
-
-	createBid := respositary.CreateBid(apiCfg, bid)
-	if createBid != nil {
-		return createBid.Error(), createBid
+	// Create BID in PostgreSQL
+	err = respositary.CreateBid(apiCfg, bid)
+	if err != nil {
+		return err.Error(), err
 	}
 
 	if apiCfg.Rabbit == nil {
-		return "rabbitmq is not initialized", errors.New("rabbitmq is not initialized")
+		return "rabbitmq is not initialized",
+			errors.New("rabbitmq is not initialized")
 	}
 
 	if apiCfg.Rabbit.Channel == nil {
-		return "rabbitmq channel is not initialized", errors.New("rabbitmq channel is not initialized")
+		return "rabbitmq channel is not initialized",
+			errors.New("rabbitmq channel is not initialized")
 	}
 
-	err = rabbitmq.PublishBidCreated(apiCfg.Rabbit.Channel, event)
+	// Create RabbitMQ event
+	event := solutionexpert_model.BidCreatedNotification{
+		StudentID:        project.Student_id,
+		SolutionExpertID: bid.Solution_expert_id,
+		ProjectID:        bid.Paddyproject_id,
+		Seen:             false,
+	}
+
+	// Put event into RabbitMQ
+	err = rabbitmq.PublishBidCreated(
+		apiCfg.Rabbit.Channel,
+		event,
+	)
 
 	if err != nil {
 		return err.Error(), err
 	}
 
-	msg := fmt.Sprintf("Solution Expert Created a Bid %v", bid.Status)
+	msg := fmt.Sprintf(
+		"Solution Expert Created a Bid %v",
+		bid.Status,
+	)
+
 	return msg, nil
 }
 

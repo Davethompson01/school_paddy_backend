@@ -11,33 +11,63 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func StartNotificationWorker(ch *amqp.Channel, api *config.ApiConfig) {
+func StartNotificationWorker(
+	ch *amqp.Channel,
+	api *config.ApiConfig,
+) {
 
 	msgs, err := rabbitmq.ApplyBidCreated(ch)
 	if err != nil {
-		log.Println(err)
+		log.Println("Failed to start notification worker:", err)
 		return
 	}
 
+	log.Println("Notification worker started")
+
 	for msg := range msgs {
 
-		var bid solutionexpert_model.ApplyForHomeWork
 		var event solutionexpert_model.BidCreatedNotification
 
-		if err := json.Unmarshal(msg.Body, &bid); err != nil {
+		// Convert RabbitMQ JSON → Go struct
+		if err := json.Unmarshal(msg.Body, &event); err != nil {
+			log.Println("Invalid message:", err)
+
 			msg.Nack(false, false)
 			continue
 		}
 
-		log.Println("Creating notification...")
+		log.Printf(
+			"Processing bid notification: project=%d expert=%d student=%d bid=%d",
 
-		// create notification
+			event.StudentID,
+			event.SolutionExpertID,
+			event.ProjectID,
+			event.BidID,
+		)
+
+		// Create notification in database
 		event.Applied = true
-		updateNotis := respositary.ApplyBidNotification(api, event)
-		if updateNotis != nil {
-			msg.Nack(false, false)
+
+		err := respositary.ApplyBidNotification(
+			api,
+			event,
+		)
+
+		if err != nil {
+			log.Println("Failed to create notification:", err)
+
+			// Tell RabbitMQ the message wasn't successfully processed
+			msg.Nack(false, true)
+
+			continue
 		}
 
-		msg.Ack(false)
+		// Everything succeeded
+		err = msg.Ack(false)
+		if err != nil {
+			log.Println("Failed to ACK message:", err)
+		}
 	}
+
+	log.Println("Notification worker stopped")
 }

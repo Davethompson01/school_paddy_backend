@@ -41,7 +41,7 @@ func main() {
 		log.Fatalf("Failed to Load Database connection %v", err)
 	}
 
-	rabbit, err := rabbitmq.New("amqp://guest:guest@localhost:5672/")
+	rabbit, err := rabbitmq.New(os.Getenv("RABBITMQ_URL"))
 	// rabbit, err := rabbitmq.New("amqp://admin:admin123@localhost:5672/")
 	if err != nil {
 		log.Fatal("Failed to connect to RabbitMQ:", err)

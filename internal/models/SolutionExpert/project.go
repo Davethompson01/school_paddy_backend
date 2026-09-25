@@ -12,6 +12,7 @@ type ApplyForHomeWork struct {
 	IsCompleted               bool   `json:"isCompleted"`
 	Accepted_a_expert_already bool   `json:"accepted_a_expert_already"`
 	Status                    string `json:"status"`
+	BidID                     int `json:"bid_id"`
 }
 
 type NegotiateProject struct {
@@ -50,6 +51,7 @@ type BidCreatedNotification struct {
 	StudentID        int  `json:"student_id"`
 	SolutionExpertID int  `json:"solution_expert_id"`
 	ProjectID        int  `json:"project_id"`
+	BidID            int  `json:"bid_id"`
 	Seen             bool `json:"seen"`
 	Applied          bool `json:"applied"`
 }

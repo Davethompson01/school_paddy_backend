@@ -44,4 +44,4 @@ CREATE TABLE bid(
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL
 )
 
-ALTER Table applied_projects add COLUMN Accepted_a_expert_already BOOLEAN default false;
+ALTER Table bid add COLUMN Accepted_a_expert_already BOOLEAN default false;

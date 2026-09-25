@@ -2,6 +2,7 @@ package respositary
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/Davethompson01/School_Paddy_golang/internal/config"
@@ -11,9 +12,9 @@ import (
 
 func ApplyBidNotification(apiCfg *config.ApiConfig, BidEvent solutionexpert_model.BidCreatedNotification) error {
 
-	query := `INSERT INTO notifications
-(student_id, solution_expert_id, project_id, seen, created_at, applied)
-VALUES ($1, $2, $3, $4, NOW(), $5);`
+	query := `INSERT INTO notification
+(student_id, solution_id, project_id, message, bid_id, created_at)
+VALUES ($1, $2, $3, $4, $5, NOW()`
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -23,8 +24,10 @@ VALUES ($1, $2, $3, $4, NOW(), $5);`
 		BidEvent.StudentID,
 		BidEvent.SolutionExpertID,
 		BidEvent.ProjectID,
-		BidEvent.Seen,
+		BidEvent.BidID,
 	)
+
+	log.Printf("%d", BidEvent.BidID)
 	return err
 }
 
