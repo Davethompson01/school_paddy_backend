@@ -53,16 +53,41 @@ func HandlerCreateBID(api *config.ApiConfig) http.HandlerFunc {
 	}
 }
 
+func BidDetails(api *config.ApiConfig) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		claims, ok := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
+		if !ok || claims == nil {
+			RespondWithJson(w, http.StatusBadRequest, false, "Unauthorized", nil)
+		}
+
+		var details solutionexpert_model.ProjectDetails
+		if err := json.NewDecoder(r.Body).Decode(&details); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		bid, err := Services.BidDetails(api,details.SolutionExpertID, details.ProjectID, details.BidID, claims.UserID)
+		if err != nil {
+			RespondWithJson(w, http.StatusUnauthorized, false, err.Error(), err.Error())
+			return
+		}
+		RespondWithJson(w, 201, true, "Fetched Project details", bid)
+	}
+}
+
 func HandlerNegotiateBID(api *config.ApiConfig) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
+		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
+
 		var bid solutionexpert_model.NegotiateProject
 
 		if err := json.NewDecoder(r.Body).Decode(&bid); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
+		// claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
 		bid.Solution_expert_id = claims.UserID
 
 		negotiateBid, err := Services.NegotiateBid(api, bid)
@@ -101,14 +126,12 @@ func StudentProjectAll(api *config.ApiConfig) http.HandlerFunc {
 		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
 		Student_id := claims.UserID
 
-		serv_StudentProject,err := Services.StudentProjectAll(api, Student_id)
+		serv_StudentProject, err := Services.StudentProjectAll(api, Student_id)
 		if err != nil {
 			RespondWithJson(w, http.StatusUnauthorized, false, err.Error(), nil)
 			return
 		}
 		RespondWithJson(w, http.StatusAccepted, true, "Fetched all projects for Students", serv_StudentProject)
-		
+
 	}
 }
-
-

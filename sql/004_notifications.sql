@@ -8,3 +8,6 @@ CREATE TABLE notification(
     bid_id INTEGER REFERENCES bid(bid_id),
     created_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
+
+
+Alter Table notification add COLUMN project_id INTEGER REFERENCES paddyproject(project_id)

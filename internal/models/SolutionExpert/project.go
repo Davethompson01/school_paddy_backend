@@ -12,7 +12,7 @@ type ApplyForHomeWork struct {
 	IsCompleted               bool   `json:"isCompleted"`
 	Accepted_a_expert_already bool   `json:"accepted_a_expert_already"`
 	Status                    string `json:"status"`
-	BidID                     int `json:"bid_id"`
+	BidID                     int    `json:"bid_id"`
 }
 
 type NegotiateProject struct {
@@ -48,10 +48,25 @@ type TotalAcceptProject struct {
 }
 
 type BidCreatedNotification struct {
-	StudentID        int  `json:"student_id"`
-	SolutionExpertID int  `json:"solution_expert_id"`
-	ProjectID        int  `json:"project_id"`
-	BidID            int  `json:"bid_id"`
-	Seen             bool `json:"seen"`
-	Applied          bool `json:"applied"`
+	StudentID        int    `json:"student_id"`
+	SolutionExpertID int    `json:"solution_expert_id"`
+	ProjectID        int    `json:"project_id"`
+	BidID            int    `json:"bid_id"`
+	Seen             bool   `json:"seen"`
+	Applied          bool   `json:"applied"`
+	Message          string `json:"message"`
+}
+
+type ProjectDetails struct {
+	BidID int `json:"bid_id"`
+	ProjectID        int       `json:"project_id"`
+	SolutionExpertID int       `json:"user_id"`
+	Username         string    `json:"username"`
+	Categories       string    `json:"categories"`
+	CreatedAt        time.Time `json:"created_at"`
+	WorkCompleted    int       `json:"work_completed"`
+	Review           string    `json:"reviews"`
+	Deadline         time.Time `json:"deadilne"`
+	Price            int       `json:"price"`
+	Profile_Pics     string    `json:"profile_pics"`
 }

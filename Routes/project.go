@@ -31,6 +31,13 @@ func Project(r chi.Router, apiCfg *config.ApiConfig) {
 		//  SOLUTION EXPERTS
 		r.Post("/createBid", handler.HandlerCreateBID(apiCfg))
 		r.Post("/negotiateBid", handler.HandlerNegotiateBID(apiCfg))
+	})
 
+	r.Route("/project", func(r chi.Router) {
+		r.Use(middleware.APIKey)
+		r.Use(middleware.JWTMiddleware)
+		r.Use(middleware.RequireRole("admin", "super_admin", "Solution", "Student"))
+
+		r.Post("/details", handler.BidDetails(apiCfg))
 	})
 }

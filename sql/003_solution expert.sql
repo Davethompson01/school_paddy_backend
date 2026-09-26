@@ -28,4 +28,26 @@ ALTER TABLE solution_expert ADD COLUMN email_verified BOOLEAN DEFAULT false;
 ALTER TABLE solution_expert
 ADD CONSTRAINT solution_expert_email_unique UNIQUE (email);
 
-DROP TABLE solution_expert;
+ALTER TABLE solution_expert ADD COLUMN profile_pics TEXT
+
+
+ALTER TABLE solution_expert ADD COLUMN categories TEXT
+
+ALTER TABLE solution_expert ADD COLUMN reviews INTEGER
+
+
+
+
+SELECT
+    details.name,
+    details.profile_pics,
+    details.categories,
+    details.created_at,
+    details.reviews,
+    project.deadline,
+    project.bidamount
+FROM solution_expert AS details
+CROSS JOIN paddyproject AS project
+WHERE details.user_id = 1
+  AND project.project_id = 4
+  AND project.student_id = 24;

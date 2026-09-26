@@ -13,13 +13,13 @@ import (
 
 func Apply_handler_notis(apiCfg *config.ApiConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
+
 		var notis_ students.NotificationResponse
 		if err := json.NewDecoder(r.Body).Decode(&notis_); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-
-		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
 
 		notis_ForApplied, err := Services.ReturnExpertAppliedNotis(apiCfg, claims.UserID)
 		if err != nil {
