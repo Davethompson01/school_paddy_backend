@@ -72,7 +72,7 @@ func Negotiate_Bid(api *config.ApiConfig, bid solutionexpert_model.NegotiateProj
 	return err
 }
 
-func AcceptBid_HomeWork(api *config.ApiConfig, acceptBID students.AcceptBid_HomeWork) error {
+func AcceptBid_HomeWork(api *config.ApiConfig, acceptBID students.AcceptBid) error {
 	query := `INSERT INTO accepted_bids(student_id,solution_expert_id, project_id, accepted)
 	VALUES($1, $2, $3, $4)`
 
@@ -96,6 +96,8 @@ func Update_paddyproject_Table_toAccept_BID(api *config.ApiConfig, project_id in
 	_, err := api.DB.ExecContext(ctx, query, project_id)
 	return err
 }
+
+// func 
 func BidDetails(
 	api *config.ApiConfig,
 	userID, projectID, student_id int,
@@ -192,3 +194,10 @@ func CheckBidExistsAndOwner(api *config.ApiConfig, bidID, userID int) bool {
 
 	return exists
 }
+
+
+
+// func CheckHomeworkStatus(api *config.ApiConfig, project){
+//     query := `SELECT student_id, category, status from paddyproject WHERE project_id = $1`
+
+// }

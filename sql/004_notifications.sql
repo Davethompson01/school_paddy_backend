@@ -11,3 +11,5 @@ CREATE TABLE notification(
 
 
 Alter Table notification add COLUMN project_id INTEGER REFERENCES paddyproject(project_id)
+
+ALTER TABLE

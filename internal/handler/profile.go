@@ -26,7 +26,7 @@ func GetProfile_handler(apiCfg *config.ApiConfig) http.HandlerFunc {
 			return
 		}
 		if profile.Role == "Solution_expert" {
-			profile_servies_expert, err := Services.Get_Profile_expert(apiCfg, claims.UserID)
+			profile_servies_expert, err := Services.ExpertProfile(apiCfg, claims.UserID)
 			if err != nil {
 				RespondWithJson(res, http.StatusUnauthorized, false, err.Error(), nil)
 				return

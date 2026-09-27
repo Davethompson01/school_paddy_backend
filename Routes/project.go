@@ -17,8 +17,8 @@ func Project(r chi.Router, apiCfg *config.ApiConfig) {
 
 		//  Students
 		r.Post("/upload", handler.Upload_homework(apiCfg))
-		r.Post("/acceptBid", handler.HandlerAcceptBID(apiCfg))
-		r.Post("/negotiateBid", handler.HandlerNegotiateBID(apiCfg))
+		r.Post("/acceptBid", handler.AcceptBID(apiCfg))
+		// r.Post("/negotiateBid", handler.HandlerNegotiateBID(apiCfg))
 		// r.Get("/notis_")
 	})
 
@@ -30,7 +30,7 @@ func Project(r chi.Router, apiCfg *config.ApiConfig) {
 
 		//  SOLUTION EXPERTS
 		r.Post("/createBid", handler.HandlerCreateBID(apiCfg))
-		r.Post("/negotiateBid", handler.HandlerNegotiateBID(apiCfg))
+		// r.Post("/negotiateBid", handler.HandlerNegotiateBID(apiCfg))
 	})
 
 	r.Route("/project", func(r chi.Router) {

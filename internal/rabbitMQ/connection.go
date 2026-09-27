@@ -24,7 +24,7 @@ func New(url string) (*RabbitMQ, error) {
     }
 
     _, err = ch.QueueDeclare(
-        "Bid_created",
+        "Created",
         true,
         false,
         false,

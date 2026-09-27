@@ -68,7 +68,7 @@ func ValidateNegotiateBID(expert solutionexpert_model.NegotiateProject) error {
 	return nil
 }
 
-func ValidateAcceptBID(expert students.AcceptBid_HomeWork) error {
+func ValidateAcceptBID(expert students.AcceptBid) error {
 	if err := validate.Struct(expert); err != nil {
 		return FormatValidationError(err)
 	}

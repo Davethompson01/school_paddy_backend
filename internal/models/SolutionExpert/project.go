@@ -67,6 +67,6 @@ type ProjectDetails struct {
 	WorkCompleted    int       `json:"work_completed"`
 	Review           string    `json:"reviews"`
 	Deadline         time.Time `json:"deadilne"`
-	Price            int       `json:"price"`
+	Price            float64       `json:"price"`
 	Profile_Pics     string    `json:"profile_pics"`
 }

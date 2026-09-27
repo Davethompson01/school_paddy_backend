@@ -16,3 +16,17 @@ func ApplyBidCreated(ch *amqp.Channel) (<-chan amqp.Delivery, error) {
 		nil,
 	)
 }
+
+func Negotiate_Bid(ch *amqp.Channel) (<-chan amqp.Delivery, error) {
+	return ch.Consume(
+		"Negotiate trasactions",
+		"",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+}
+
+

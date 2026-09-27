@@ -71,3 +71,4 @@ func StartNotificationWorker(
 
 	log.Println("Notification worker stopped")
 }
+

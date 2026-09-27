@@ -11,7 +11,7 @@ import (
 	Services "github.com/Davethompson01/School_Paddy_golang/internal/services"
 )
 
-func Apply_handler_notis(apiCfg *config.ApiConfig) http.HandlerFunc {
+func Apply_hadler_notis(apiCfg *config.ApiConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
 

@@ -6,6 +6,7 @@ import (
 
 	"github.com/Davethompson01/School_Paddy_golang/internal/config"
 	solutionexpert_model "github.com/Davethompson01/School_Paddy_golang/internal/models/SolutionExpert"
+	students "github.com/Davethompson01/School_Paddy_golang/internal/models/Students"
 	rabbitmq "github.com/Davethompson01/School_Paddy_golang/internal/rabbitMQ"
 	"github.com/Davethompson01/School_Paddy_golang/internal/respositary"
 	Validation "github.com/Davethompson01/School_Paddy_golang/internal/validation"
@@ -100,16 +101,48 @@ func CreateBid(
 	return msg, nil
 }
 
-func NegotiateBid(apiCfg *config.ApiConfig, bid solutionexpert_model.NegotiateProject) (string, error) {
-	err := Validation.ValidateNegotiateBID(bid)
+// func NegotiateBid(apiCfg *config.ApiConfig, bid solutionexpert_model.NegotiateProject) (string, error) {
+// 	err := Validation.ValidateNegotiateBID(bid)
+// 	if err != nil {
+// 		return err.Error(), err
+// 	}
+
+// 	negotiateBid := respositary.Negotiate_Bid(apiCfg, bid)
+// 	if negotiateBid != nil {
+// 		return negotiateBid.Error(), nil
+// 	}
+
+// 	return "Homework Accepted", nil
+// }
+
+func AcceptBID(apiCfg *config.ApiConfig, bid students.AcceptBid) (string, error) {
+	err := Validation.ValidateAcceptBID(bid)
 	if err != nil {
 		return err.Error(), err
 	}
 
-	negotiateBid := respositary.Negotiate_Bid(apiCfg, bid)
-	if negotiateBid != nil {
-		return negotiateBid.Error(), nil
+	checkBidStatus, err := respositary.GetProjectByID(apiCfg, bid.Project_id)
+	if err != nil {
+		return checkBidStatus.Status, err
 	}
 
-	return "Homework Accepted", nil
+	if checkBidStatus.Accepted_a_expert_already {
+		return "Negotiation ongoing on project already", err
+	}
+
+	apiCfg.DB.Begin()
+	acceptBid := respositary.AcceptBid_HomeWork(apiCfg, bid)
+	if acceptBid != nil {
+		return acceptBid.Error(), acceptBid
+	}
+
+	updateProjectTable := respositary.Update_paddyproject_Table_toAccept_BID(apiCfg, bid.Project_id)
+	if updateProjectTable != nil {
+		return updateProjectTable.Error(), updateProjectTable
+	}
+
+
+
+
+	return "Solution expert Accept", nil
 }

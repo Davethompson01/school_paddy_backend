@@ -76,32 +76,32 @@ func BidDetails(api *config.ApiConfig) http.HandlerFunc {
 	}
 }
 
-func HandlerNegotiateBID(api *config.ApiConfig) http.HandlerFunc {
+// func HandlerNegotiateBID(api *config.ApiConfig) http.HandlerFunc {
 
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
+
+// 		var bid solutionexpert_model.NegotiateProject
+
+// 		if err := json.NewDecoder(r.Body).Decode(&bid); err != nil {
+// 			http.Error(w, err.Error(), http.StatusBadRequest)
+// 			return
+// 		}
+// 		// claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
+// 		bid.Solution_expert_id = claims.UserID
+
+// 		negotiateBid, err := Services.NegotiateBid(api, bid)
+// 		if err != nil {
+// 			RespondWithJson(w, http.StatusUnauthorized, false, err.Error(), nil)
+// 			return
+// 		}
+// 		RespondWithJson(w, http.StatusAccepted, true, "Negotiated for Homework", negotiateBid)
+// 	}
+// }
+
+func AcceptBID(api *config.ApiConfig) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
-
-		var bid solutionexpert_model.NegotiateProject
-
-		if err := json.NewDecoder(r.Body).Decode(&bid); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		// claims := r.Context().Value(middleware.ClaimsKey).(*auth.Claims)
-		bid.Solution_expert_id = claims.UserID
-
-		negotiateBid, err := Services.NegotiateBid(api, bid)
-		if err != nil {
-			RespondWithJson(w, http.StatusUnauthorized, false, err.Error(), nil)
-			return
-		}
-		RespondWithJson(w, http.StatusAccepted, true, "Negotiated for Homework", negotiateBid)
-	}
-}
-
-func HandlerAcceptBID(api *config.ApiConfig) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var bid students.AcceptBid_HomeWork
+		var bid students.AcceptBid
 
 		if err := json.NewDecoder(r.Body).Decode(&bid); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
